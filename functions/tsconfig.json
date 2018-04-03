@@ -4,6 +4,7 @@
     "module": "commonjs",
     "noImplicitReturns": true,
     "outDir": "lib",
+    "allowJs": true,
     "sourceMap": true,
     "target": "es6"
   },
