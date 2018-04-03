@@ -14,7 +14,7 @@ module.exports = function (req, res) {
                 const accountArray = [];
 
                 querySnapshot.forEach((doc) => {
-                    accountArray.push({id: doc.id, accountData: doc.data()});
+                    accountArray.push({id: doc.id, name: doc.data().name});
                 });
                 res.status(200).send(accountArray);
             })
