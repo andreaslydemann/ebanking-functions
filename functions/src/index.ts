@@ -3,6 +3,8 @@ const functions = require('firebase-functions');
 const serviceAccount = require('./config/service_account');
 
 const getAccounts = require('./accounts/getAccounts');
+const getExpenses = require('./accounts/getExpenses');
+
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
@@ -11,3 +13,4 @@ admin.initializeApp({
 
 // ----------ACCOUNT RELATED FUNCTIONS----------
 exports.getAccounts = functions.https.onRequest(getAccounts);
+exports.getExpenses = functions.https.onRequest(getExpenses);
