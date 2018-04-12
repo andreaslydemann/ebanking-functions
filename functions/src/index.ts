@@ -2,8 +2,8 @@ const admin = require('firebase-admin');
 const functions = require('firebase-functions');
 const serviceAccount = require('./config/service_account');
 
-const getAccounts = require('./accounts/getAccounts');
-const getExpenses = require('./accounts/getExpenses');
+const getAccounts = require('./accounts/get_accounts');
+const getExpenses = require('./accounts/get_expenses');
 
 
 admin.initializeApp({
