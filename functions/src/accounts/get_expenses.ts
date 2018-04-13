@@ -1,7 +1,6 @@
 import admin = require('firebase-admin');
 
 const cors = require('cors')({origin: true});
-const dateHelper = require('../helpers/date_helper');
 
 module.exports = function (req, res) {
     cors(req, res, async () => {
@@ -10,16 +9,19 @@ module.exports = function (req, res) {
             return res.status(400).send({error: 'Fejl i anmodningen.'});
 
         const db = admin.firestore();
-        const acoountIDs = JSON.parse(req.query.accountIDs);
-        const from = String(
-            dateHelper.toDateString(new Date(req.query.from)));
-        const to = String(
-            dateHelper.toDateString(new Date(req.query.to)));
+        const acountIDs = JSON.parse(req.query.accountIDs);
+        const fromParts = String(req.query.from).split("-");
+        const toParts = String(req.query.to).split("-");
+
+        const from = Date.parse(fromParts[1]+ "-" + fromParts[0] + "-" + fromParts[2]);
+        const to = Date.parse(toParts[1]+ "-" + toParts[0] + "-" + toParts[2]);
+
+        console.log(from + " - " + to);
         const getExpensesPromises = [];
         const sortedExpenses = [];
 
         const expenses = [];
-        acoountIDs.forEach(accountID => {
+        acountIDs.forEach(accountID => {
             const getExpensesPromise = db.collection("expenses")
                 .where("accountID", "==", accountID)
                 .get()
@@ -37,7 +39,10 @@ module.exports = function (req, res) {
 
         await Promise.all(getExpensesPromises);
         expenses.forEach((expense) => {
-            if (expense.createdAt >= from && expense.createdAt <= to) {
+            const creationDateParts = String(expense.createdAt).split("-");
+            const creationDate = Date.parse(creationDateParts[1]+ "-" + creationDateParts[0] + "-" + creationDateParts[2]);
+            console.log(creationDate + " >= " + from + " && " + creationDate + " <= " + to);
+            if (creationDate >= from && creationDate <= to) {
                 sortedExpenses.push({
                     amount: expense.amount,
                     categoryTypeID: expense.categoryTypeID
