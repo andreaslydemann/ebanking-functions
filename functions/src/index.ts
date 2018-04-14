@@ -3,7 +3,7 @@ const functions = require('firebase-functions');
 const serviceAccount = require('./config/service_account');
 
 const getAccounts = require('./accounts/get_accounts');
-const getExpenses = require('./accounts/get_expenses');
+const getExpensesBetweenDates = require('./accounts/get_expenses_between_dates');
 
 
 admin.initializeApp({
@@ -13,4 +13,4 @@ admin.initializeApp({
 
 // ----------ACCOUNT RELATED FUNCTIONS----------
 exports.getAccounts = functions.https.onRequest(getAccounts);
-exports.getExpenses = functions.https.onRequest(getExpenses);
+exports.getExpensesBetweenDates = functions.https.onRequest(getExpensesBetweenDates);
