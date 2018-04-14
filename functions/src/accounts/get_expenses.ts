@@ -9,19 +9,18 @@ module.exports = function (req, res) {
             return res.status(400).send({error: 'Fejl i anmodningen.'});
 
         const db = admin.firestore();
-        const acountIDs = JSON.parse(req.query.accountIDs);
+        const accountIDs = String(req.query.accountIDs).split(",");
         const fromParts = String(req.query.from).split("-");
         const toParts = String(req.query.to).split("-");
 
         const from = Date.parse(fromParts[1]+ "-" + fromParts[0] + "-" + fromParts[2]);
         const to = Date.parse(toParts[1]+ "-" + toParts[0] + "-" + toParts[2]);
 
-        console.log(from + " - " + to);
         const getExpensesPromises = [];
         const sortedExpenses = [];
 
         const expenses = [];
-        acountIDs.forEach(accountID => {
+        accountIDs.forEach(accountID => {
             const getExpensesPromise = db.collection("expenses")
                 .where("accountID", "==", accountID)
                 .get()
@@ -41,7 +40,6 @@ module.exports = function (req, res) {
         expenses.forEach((expense) => {
             const creationDateParts = String(expense.createdAt).split("-");
             const creationDate = Date.parse(creationDateParts[1]+ "-" + creationDateParts[0] + "-" + creationDateParts[2]);
-            console.log(creationDate + " >= " + from + " && " + creationDate + " <= " + to);
             if (creationDate >= from && creationDate <= to) {
                 sortedExpenses.push({
                     amount: expense.amount,
